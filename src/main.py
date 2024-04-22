@@ -1,7 +1,6 @@
 import logging
+from aiogram import Bot, Dispatcher, executor, types
 from auth_data import token
-from aiogram import Bot, Dispatcher, types
-from aiogram.utils.executor import start_polling
 
 bot = Bot(token)
 dp = Dispatcher(bot)
@@ -32,4 +31,4 @@ async def game2(message: types.Message):
 
 
 if __name__ == '__main__':
-    start_polling(dp, skip_updates=True)
+    executor.start_polling(dp, skip_updates=True)
