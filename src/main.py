@@ -40,19 +40,19 @@ async def game2(message: types.Message):
 
 @dp.message(Command('game3'))
 async def game2(message: types.Message):
-    await message.answer('This is game 2')
+    await message.answer('This is game 3')
 
 @dp.message(Command('game4'))
 async def game2(message: types.Message):
-    await message.answer('This is game 2')
+    await message.answer('This is game 4')
 
 @dp.message(Command('game5'))
 async def game2(message: types.Message):
-    await message.answer('This is game 2')
+    await message.answer('This is game 5')
 
 @router.message(F.text)
 async def any(message: Message):
-    await message.reply('Я твоя не понимать бро')
+    await message.reply('Invalid input text')
 
 async def main():
     await dp.start_polling(bot)
