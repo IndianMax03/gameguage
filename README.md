@@ -9,4 +9,4 @@
 > Nikita Zuev
 
 ## NB
-To run the application use aiogram version 2.X.X.
+To run the application use aiogram version 3.X.X.
