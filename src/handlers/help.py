@@ -6,7 +6,7 @@ router = Router()
 
 
 @router.message(Command("help"))
-async def helpHandler(message: Message):
+async def help_handler(message: Message):
     await message.answer(
         "List of available commands:\n"
         "/help - show command list\n"
