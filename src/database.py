@@ -136,3 +136,44 @@ def get_random_book_quotes(number: int) -> list[tuple[str, str]]:
         c.close()
     return result
 
+
+def get_random_word(first_letter: str, excluded_words: set[str]) -> str:
+    """
+    :return: word
+    """
+    with sqlite3.connect(DB_NAME) as conn:
+        c = conn.cursor()
+        if first_letter is None:
+            c.execute(
+                """
+                SELECT word FROM en_words ORDER BY RANDOM() LIMIT 1
+                """
+            )
+        else:
+            c.execute(
+                f"""
+                SELECT word FROM en_words WHERE word LIKE ? AND word NOT IN ({",".join("?"*len(excluded_words))}) ORDER BY RANDOM() LIMIT 1
+                """,
+                (f"{first_letter}%", *excluded_words),
+            )
+
+        result = c.fetchone()
+        c.close()
+    return result[0] if result else None
+
+
+def check_word(word: str) -> bool:
+    """
+    :return: True if word exists
+    """
+    with sqlite3.connect(DB_NAME) as conn:
+        c = conn.cursor()
+        c.execute(
+            """
+            SELECT 1 FROM en_words WHERE word = ?
+            """,
+            (word,),
+        )
+        result = c.fetchone()
+        c.close()
+    return result is not None
