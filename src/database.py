@@ -103,19 +103,20 @@ def get_random_words_by_locale(locale: str) -> tuple[str, list[str]]:
     """
     with sqlite3.connect(DB_NAME) as conn:
         c = conn.cursor()
+        words = tuple()
+        while len(words) == 0:
+            random_en_word = c.execute(
+                """
+                SELECT id, word FROM en_words ORDER BY RANDOM() LIMIT 1
+                """
+            ).fetchone()
 
-        random_en_word = c.execute(
-            """
-            SELECT id, word FROM en_words ORDER BY RANDOM() LIMIT 1
-            """
-        ).fetchone()
-
-        words = c.execute(
-            """
-            SELECT word FROM words WHERE locale = ? AND word_id = ?
-            """,
-            (locale, random_en_word[0]),
-        ).fetchall()
+            words = c.execute(
+                """
+                SELECT word FROM words WHERE locale = ? AND word_id = ?
+                """,
+                (locale, random_en_word[0]),
+            ).fetchall()
         c.close()
     return (random_en_word[1], [word[0] for word in words])
 
