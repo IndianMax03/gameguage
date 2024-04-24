@@ -25,7 +25,7 @@ async def fill_handler(message: Message, state: FSMContext):
 
 @router.message(FillingGaps.answering, F.text)
 async def fill_answer(message: Message, state: FSMContext):
-    if not message.text[0] == "/":
+    if message.text[0] == "/":
         await message.answer("You quit the game.")
         await state.clear()
         return

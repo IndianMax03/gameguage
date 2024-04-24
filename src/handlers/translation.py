@@ -24,7 +24,7 @@ async def translataion_handler(message: Message, state: FSMContext):
 
 @router.message(Translation.answer, F.text)
 async def translation_answer(message: Message, state: FSMContext):
-    if not message.text[0] == "/":
+    if message.text[0] == "/":
         await message.answer("You quit the game.")
         await state.clear()
         return
