@@ -35,6 +35,25 @@ def create_db(db_name: str = None) -> None:
 
         c.execute(
             """
+            CREATE TABLE IF NOT EXISTS en_words (
+                id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                word TEXT NOT NULL UNIQUE
+            )
+            """
+        )
+        c.execute(
+            """
+            CREATE TABLE IF NOT EXISTS words (
+                locale VARCHAR(2) NOT NULL,
+                word TEXT NOT NULL,
+                word_id INTEGER NOT NULL,
+                FOREIGN KEY(word_id) REFERENCES en_words(id)
+            )
+            """
+        )
+
+        c.execute(
+            """
             CREATE TABLE IF NOT EXISTS book_quotes (
                 quote TEXT NOT NULL UNIQUE,
                 book_and_author TEXT NOT NULL
@@ -76,6 +95,29 @@ def get_random_text_with_gap() -> tuple[str, str]:
         result = c.fetchone()
         c.close()
     return result
+
+
+def get_random_words_by_locale(locale: str) -> tuple[str, list[str]]:
+    """
+    :return: (en_word, words)
+    """
+    with sqlite3.connect(DB_NAME) as conn:
+        c = conn.cursor()
+
+        random_en_word = c.execute(
+            """
+            SELECT id, word FROM en_words ORDER BY RANDOM() LIMIT 1
+            """
+        ).fetchone()
+
+        words = c.execute(
+            """
+            SELECT word FROM words WHERE locale = ? AND word_id = ?
+            """,
+            (locale, random_en_word[0]),
+        ).fetchall()
+        c.close()
+    return (random_en_word[1], [word[0] for word in words])
 
 
 def get_random_book_quotes(number: int) -> list[tuple[str, str]]:
