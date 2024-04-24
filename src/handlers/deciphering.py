@@ -18,9 +18,9 @@ class DecipheringVoice(StatesGroup):
 @router.message(Command("deciphering"))
 async def deciphering_handler(message: Message, state: FSMContext):
 
-    rowid, text = get_random_speech()
+    row_id, text = get_random_speech()
     await message.answer_audio(
-        FSInputFile("./volume/speeches/" + str(rowid)), caption="Write this speech"
+        FSInputFile("./volume/speeches/" + str(row_id)), caption="Write this speech"
     )
 
     await state.set_state(DecipheringVoice.answering)
