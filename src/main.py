@@ -1,61 +1,59 @@
 import asyncio
 import logging
-from aiogram import Bot, Dispatcher, types
-from aiogram.dispatcher.router import Router
-from aiogram.filters.command import Command
-from aiogram.types import Message
-from aiogram import F
 
+from aiogram import Bot, Dispatcher
+from aiogram.types import BotCommand
+
+import handlers.deciphering as deciphering_module
+import handlers.fill as fill_module
+import handlers.help as help_module
+import handlers.quote as quote_module
+import handlers.translation as translation_module
+import handlers.words as words_module
 from auth_data import token
 
 logging.basicConfig(level=logging.INFO)
 bot = Bot(token)
 dp = Dispatcher()
-router = Router()
-dp.include_routers(router)
+
+dp.include_routers(
+    help_module.router,
+    words_module.router,
+    fill_module.router,
+    translation_module.router,
+    deciphering_module.router,
+    quote_module.router,
+)
 logging.basicConfig(level=logging.INFO)
 
-@dp.message(Command('start'))
-async def start(message: types.Message):
-    await message.answer('Hi! I am a bot. Write /help for the command list.')
 
-@dp.message(Command('help'))
-async def help_command(message: types.Message):
-    await message.answer('List of available commands:\n'
-                        '/help - show command list\n'
-                        '/game1 - start game 1\n'
-                        '/game2 - start game 2\n'
-                        '/game3 - start game 3\n'
-                        '/game4 - start game 4\n'
-                        '/game5 - start game 5')
+async def setup_bot_commands():
+    await bot.set_my_commands(
+        [
+            BotCommand(command="/help", description="Get info about me"),
+            BotCommand(command="/words", description='Start "Word game"'),
+            BotCommand(command="/fill", description='Start "Fill in the blank" game'),
+            BotCommand(
+                command="/translation", description='Start "Word translation" game'
+            ),
+            BotCommand(
+                command="/deciphering",
+                description='Start "Deciphering voice messages" game',
+            ),
+            BotCommand(
+                command="/quote",
+                description='Start "Identify the author by a famous quote" game',
+            ),
+        ]
+    )
 
-
-@dp.message(Command('game1'))
-async def game1(message: types.Message):
-    await message.answer('This is game 1')
-
-@dp.message(Command('game2'))
-async def game2(message: types.Message):
-    await message.answer('This is game 2')
-
-@dp.message(Command('game3'))
-async def game2(message: types.Message):
-    await message.answer('This is game 3')
-
-@dp.message(Command('game4'))
-async def game2(message: types.Message):
-    await message.answer('This is game 4')
-
-@dp.message(Command('game5'))
-async def game2(message: types.Message):
-    await message.answer('This is game 5')
-
-@router.message(F.text)
-async def any(message: Message):
-    await message.reply('Invalid input text')
 
 async def main():
+    await setup_bot_commands()
+    logging.info("Starting bot")
     await dp.start_polling(bot)
+    logging.info("Bot stopped")
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     asyncio.run(main())
