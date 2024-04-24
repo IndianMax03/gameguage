@@ -42,8 +42,6 @@ async def words_answer(message: Message, state: FSMContext):
         return
 
     excluded_words.add(message.text)
-    print(message.text)
-    print(message.text[-1])
     word = get_random_word(message.text[-1], excluded_words)
 
     if word is None:
