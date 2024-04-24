@@ -23,6 +23,15 @@ def create_db(db_name: str = None) -> None:
             )
             """
         )
+
+        c.execute(
+            """
+            CREATE TABLE IF NOT EXISTS gap_text (
+                main_text TEXT NOT NULL UNIQUE,
+                missed_text TEXT NOT NULL
+            )
+            """
+        )
 def get_random_speech() -> tuple[int, str]:
     """
     :return: (ROWID, message)
@@ -37,3 +46,20 @@ def get_random_speech() -> tuple[int, str]:
         speech = c.fetchone()
         c.close()
     return speech
+
+
+def get_random_text_with_gap() -> tuple[str, str]:
+    """
+    :return: (main text, missed text)
+    """
+    with sqlite3.connect(DB_NAME) as conn:
+        c = conn.cursor()
+        c.execute(
+            """
+            SELECT main_text, missed_text FROM gap_text ORDER BY RANDOM() LIMIT 1
+            """
+        )
+        result = c.fetchone()
+        c.close()
+    return result
+
