@@ -19,7 +19,9 @@ class DecipheringVoice(StatesGroup):
 async def deciphering_handler(message: Message, state: FSMContext):
 
     rowid, text = get_random_speech()
-    await message.answer_audio(FSInputFile("./volume/speeches/" + str(rowid)))
+    await message.answer_audio(
+        FSInputFile("./volume/speeches/" + str(rowid)), caption="Write this speech"
+    )
 
     await state.set_state(DecipheringVoice.answering)
     await state.update_data(correct_answer=text)

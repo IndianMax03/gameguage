@@ -17,7 +17,7 @@ class Words(StatesGroup):
 @router.message(Command("words"))
 async def words_handler(message: Message, state: FSMContext):
     word = get_random_word(None, None)
-    await message.answer(word)
+    await message.answer("Let's play! I start\n\n" + word)
     await state.clear()
     await state.update_data(last_word=word, excluded_words=set([word]))
     await state.set_state(Words.answering)
@@ -27,7 +27,7 @@ async def words_handler(message: Message, state: FSMContext):
 async def words_answer(message: Message, state: FSMContext):
     data = await state.get_data()
     last_word = data["last_word"]
-    excluded_words = data["excluded_words"]
+    excluded_words: set = data["excluded_words"]
 
     if message.text[0] != last_word[-1]:
         await message.answer("Incorrect first letter :-(")

@@ -17,7 +17,7 @@ class FillingGaps(StatesGroup):
 @router.message(Command("fill"))
 async def fill_handler(message: Message, state: FSMContext):
     main_text, missed_text = get_random_text_with_gap()
-    await message.answer(main_text)
+    await message.answer("Fill the gaps\n\n" + main_text)
 
     await state.update_data(missed_text=missed_text)
     await state.set_state(FillingGaps.answering)

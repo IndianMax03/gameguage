@@ -16,8 +16,8 @@ class Translation(StatesGroup):
 @router.message(Command("translation"))
 async def translataion_handler(message: Message, state: FSMContext):
     en_word, words = get_random_words_by_locale("ru")
-    print(en_word, words)
-    await message.answer(en_word)
+
+    await message.answer("Translate this word\n\n" + en_word)
     await state.update_data(correct_answer=words)
     await state.set_state(Translation.answer)
 

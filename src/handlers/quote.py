@@ -23,7 +23,9 @@ async def quote_handler(message: Message, state: FSMContext):
     for row in result_list:
         builder.add(InlineKeyboardButton(text=row[1], callback_data=row[1]))
 
-    await message.answer(quote, reply_markup=builder.as_markup())
+    await message.answer(
+        "Guess the book and author\n\n" + quote, reply_markup=builder.as_markup()
+    )
     await state.update_data(correct_answer=result_list[0][1], quote=quote)
     await state.set_state(Quote.answering)
 
