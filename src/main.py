@@ -11,8 +11,10 @@ import handlers.quote as quote_module
 import handlers.translation as translation_module
 import handlers.words as words_module
 from auth_data import token
+from database import create_db
 
 logging.basicConfig(level=logging.INFO)
+create_db()
 bot = Bot(token)
 dp = Dispatcher()
 
