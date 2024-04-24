@@ -32,6 +32,20 @@ def create_db(db_name: str = None) -> None:
             )
             """
         )
+
+        c.execute(
+            """
+            CREATE TABLE IF NOT EXISTS book_quotes (
+                quote TEXT NOT NULL UNIQUE,
+                book_and_author TEXT NOT NULL
+            )
+            """
+        )
+
+        conn.commit()
+        c.close()
+
+
 def get_random_speech() -> tuple[int, str]:
     """
     :return: (ROWID, message)
@@ -60,6 +74,23 @@ def get_random_text_with_gap() -> tuple[str, str]:
             """
         )
         result = c.fetchone()
+        c.close()
+    return result
+
+
+def get_random_book_quotes(number: int) -> list[tuple[str, str]]:
+    """
+    :return: list of (quote, book_and_author)
+    """
+    with sqlite3.connect(DB_NAME) as conn:
+        c = conn.cursor()
+        c.execute(
+            """
+            SELECT quote, book_and_author FROM book_quotes ORDER BY RANDOM() LIMIT ?
+            """,
+            (number,),
+        )
+        result = c.fetchall()
         c.close()
     return result
 
