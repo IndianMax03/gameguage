@@ -6,7 +6,7 @@ from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import State, StatesGroup
 
 
-from database import get_random_speech
+from src.database import get_random_speech
 
 router = Router()
 
@@ -29,6 +29,11 @@ async def deciphering_handler(message: Message, state: FSMContext):
 
 @router.message(DecipheringVoice.answering, F.text)
 async def deciphering_answer(message: Message, state: FSMContext):
+    if not message.text[0] == "/":
+        await message.answer("You quit the game.")
+        await state.clear()
+        return
+
     data = await state.get_data()
     correct_answer = data["correct_answer"]
     if correct_answer == message.text:

@@ -4,8 +4,8 @@ from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import State, StatesGroup
 from aiogram.types import Message
 
-from database import get_random_word
-from database import check_word
+from src.database import get_random_word
+from src.database import check_word
 
 router = Router()
 
@@ -25,6 +25,10 @@ async def words_handler(message: Message, state: FSMContext):
 
 @router.message(Words.answering, F.text)
 async def words_answer(message: Message, state: FSMContext):
+    if not message.text[0] == "/":
+        await message.answer("You quit the game.")
+        await state.clear()
+        return
     data = await state.get_data()
     last_word = data["last_word"]
     excluded_words: set = data["excluded_words"]

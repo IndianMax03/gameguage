@@ -4,14 +4,14 @@ import logging
 from aiogram import Bot, Dispatcher
 from aiogram.types import BotCommand
 
-import handlers.deciphering as deciphering_module
-import handlers.fill as fill_module
-import handlers.help as help_module
-import handlers.quote as quote_module
-import handlers.translation as translation_module
-import handlers.words as words_module
-from auth_data import token
-from database import create_db
+import src.handlers.deciphering as deciphering_module
+import src.handlers.fill as fill_module
+import src.handlers.help as help_module
+import src.handlers.quote as quote_module
+import src.handlers.translation as translation_module
+import src.handlers.words as words_module
+from src.auth_data import token
+from src.database import create_db
 
 logging.basicConfig(level=logging.INFO)
 create_db()

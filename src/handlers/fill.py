@@ -5,7 +5,7 @@ from aiogram.types import Message
 from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import State, StatesGroup
 
-from database import get_random_text_with_gap
+from src.database import get_random_text_with_gap
 
 router = Router()
 
@@ -25,6 +25,11 @@ async def fill_handler(message: Message, state: FSMContext):
 
 @router.message(FillingGaps.answering, F.text)
 async def fill_answer(message: Message, state: FSMContext):
+    if not message.text[0] == "/":
+        await message.answer("You quit the game.")
+        await state.clear()
+        return
+
     data = await state.get_data()
     correct_answer = data["missed_text"]
     if correct_answer == message.text:
