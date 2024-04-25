@@ -10,7 +10,7 @@ async def help_handler(message: Message):
     await message.answer(
         "List of available commands:\n"
         "/help - show command list\n"
-        "/words - start 'Word game'\n"
+        "/words - start 'Words' game\n"
         "/fill - start 'Fill in the blank' game\n"
         "/translation - start 'Word translation' game\n"
         "/deciphering - start 'Deciphering voice messages' game\n"
