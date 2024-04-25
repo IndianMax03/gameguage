@@ -1,3 +1,5 @@
+import random
+
 from aiogram import F, Router
 from aiogram.filters import Command
 from aiogram.fsm.context import FSMContext
@@ -26,7 +28,7 @@ async def words_handler(message: Message, state: FSMContext):
 @router.message(Words.answering, F.text)
 async def words_answer(message: Message, state: FSMContext):
     if message.text[0] == "/":
-        await message.answer("You quit the game.")
+        await message.answer("You quit the 'Words' game. 👋 \nType new command again please!")
         await state.clear()
         return
     data = await state.get_data()
@@ -34,24 +36,24 @@ async def words_answer(message: Message, state: FSMContext):
     excluded_words: set = data["excluded_words"]
 
     if message.text[0] != last_word[-1]:
-        await message.answer("Incorrect first letter :-(")
+        await message.answer("The first letter is incorrect! 😬")
         return
 
     if message.text in excluded_words:
-        await message.answer("You already said this word")
+        await message.answer("This word has already been used! 😁")
         return
 
     if not check_word(message.text):
-        await message.answer("This word does not exist")
+        await message.answer("This word does not exist! Or I don’t know it yet... 😔")
         return
 
     excluded_words.add(message.text)
     word = get_random_word(message.text[-1], excluded_words)
 
     if word is None:
-        await message.answer("I don't know more words. You win!")
+        await message.answer("I don't know more words. You win! 🤯")
         await state.clear()
         return
 
-    await message.answer(word)
+    await message.answer(word + ' ' + random.choice(['🫵😃', '🫵😇', '🫵😜', '🥱', '🫵🤗', '🫵🙂', '🫵😉', '🫵😈', '🫵🤠', '🫵🤓']))
     await state.update_data(last_word=word, excluded_words=excluded_words)

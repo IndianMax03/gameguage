@@ -7,6 +7,7 @@ from aiogram.types import BotCommand
 import src.handlers.deciphering as deciphering_module
 import src.handlers.fill as fill_module
 import src.handlers.help as help_module
+import src.handlers.start as start_module
 import src.handlers.quote as quote_module
 import src.handlers.translation as translation_module
 import src.handlers.words as words_module
@@ -19,6 +20,7 @@ bot = Bot(token)
 dp = Dispatcher()
 
 dp.include_routers(
+    start_module.router,
     help_module.router,
     words_module.router,
     fill_module.router,
